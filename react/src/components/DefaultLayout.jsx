@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Navigate, Outlet } from 'react-router-dom'
 import { userStateContext } from '../contexts/ContextProvider'
 
 const navigation = [
@@ -15,11 +15,16 @@ function classNames(...classes) {
 
 export default function DefaultLayout() {
 
-  const { currentUser } = userStateContext();
+  const { currentUser, userToken } = userStateContext();
 
   const logout = (ev) => {
     ev.preventDefault();
   }
+
+  if(!userToken){
+    return <Navigate to="login" />
+  }
+  
   return (
     <>
       <div className="min-h-full">
@@ -57,7 +62,6 @@ export default function DefaultLayout() {
                   </div>
                   <div className="hidden md:block">
                     <div className="ml-4 flex items-center md:ml-6">
-
                       {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
                         <div>
