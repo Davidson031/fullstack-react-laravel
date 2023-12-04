@@ -28,6 +28,7 @@ export default function DefaultLayout() {
   return (
     <>
       <div className="min-h-full">
+
         <Disclosure as="nav" className="bg-gray-800">
           {({ open }) => (
             <>
