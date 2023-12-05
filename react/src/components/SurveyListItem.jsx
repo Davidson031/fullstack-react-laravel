@@ -6,7 +6,7 @@ export default function SurveyListItem({ survey, onDeleteClick }) {
 
     return (
         <div className="flex flex-col py-4 px-6 shadow-md bg-white hover:bg-gray-h-[470px]">
-            <img src={survey.image_url} alt={survey.title} className="w-full h-48 object-cover" />
+            <img src="https://raw.githubusercontent.com/llanojs/Readme_template/master/react-logo.jpg" alt={survey.title} className="w-full h-48 object-cover" />
             <h4 className="mt-4 text-lg font-bold">{survey.title}</h4>
             <div dangerouslySetInnerHTML={{ __html: survey.description }} className="overflow-hidden flex-1">
             </div>
