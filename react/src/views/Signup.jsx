@@ -1,8 +1,36 @@
 import { Link } from "react-router-dom";
 import { LockClosedIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
+import axiosClient from '../axios.js'
 
 export default function Signup() {
+
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const [errors, setErrors] = useState({__html: ''});
+
+
+  const onSubmit = (ev) => {
+    ev.preventDefault();
+    setErrors({__html: ''});
+
+    axiosClient.post('/signup', {
+      name: fullName,
+      email: email, 
+      password: password,
+      password_confirmation: passwordConfirmation
+    }).then(({data}) => {
+      console.log(data);
+    }).catch((error) => {
+      if(error.response){
+        const finalErrors = Object.values(error.response.data.errors).reduce((accum, next) => [...accum, ...next], []);
+        setErrors({ __html: finalErrors.join('<br>')})
+      } 
+      console.error(error);
+    });
+  } 
 
   return (
     <>
@@ -19,7 +47,14 @@ export default function Signup() {
         </Link>
       </p>
 
+      {errors.__html && (
+        <div className="bg-red-500 rounded py-2 px-3 text-white" dangerouslySetInnerHTML={ errors }>
+          
+        </div>
+      )}
+
       <form
+        onSubmit={ onSubmit }
         className="mt-8 space-y-6"
         action="#"
         method="POST"
@@ -34,7 +69,6 @@ export default function Signup() {
               id="full-name"
               name="name"
               type="text"
-              required
               onChange={ev => setFullName(ev.target.value)}
               className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
               placeholder="Full Name"
@@ -49,9 +83,36 @@ export default function Signup() {
               name="email"
               type="email"
               autoComplete="email"
-              required
+              onChange={ev => setEmail(ev.target.value)}
               className="relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
               placeholder="Email address"
+            />
+          </div>
+          <div>
+            <label htmlFor="password" className="sr-only">
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              className="relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+              placeholder="Password"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="password-confirmation" className="sr-only">
+              Password Confirmation
+            </label>
+            <input
+              id="password-confirmation"
+              name="password_confirmation"
+              type="password"
+              onChange={ev => setPasswordConfirmation(ev.target.value)}
+              className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+              placeholder="Password Confirmation"
             />
           </div>
         </div>

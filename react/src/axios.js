@@ -11,8 +11,8 @@ const axiosClient = axios.create({
 //interceptions are checkpoints passed by every api request//
 axiosClient.interceptors.request.use((config) => {
     const token = '123432432';
-
     config.headers.Authorization = `Bearer ${token}`
+    return config;
 });
 
 axiosClient.interceptors.response.use(response => {
