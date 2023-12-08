@@ -3,6 +3,7 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { NavLink, Navigate, Outlet } from 'react-router-dom'
 import { useStateContext } from '../contexts/ContextProvider'
+import axiosClient from '../axios'
 
 const navigation = [
   { name: 'Dashboard', to: '/' },
@@ -15,16 +16,21 @@ function classNames(...classes) {
 
 export default function DefaultLayout() {
 
-  const { currentUser, userToken } = useStateContext();
+  const { currentUser, userToken, setUserToken, setCurrentUser } = useStateContext();
 
   const logout = (ev) => {
     ev.preventDefault();
+    axiosClient.post('/logout')
+      .then(res => {
+        setCurrentUser({});
+        setUserToken(null);
+      })
   }
 
-  if(!userToken){
+  if (!userToken) {
     return <Navigate to="login" />
   }
-  
+
   return (
     <>
       <div className="min-h-full">
@@ -69,7 +75,7 @@ export default function DefaultLayout() {
                           <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                             <span className="absolute -inset-1.5" />
                             <span className="sr-only">Open user menu</span>
-                            <UserIcon className='w-8 h-8 bg-black/25 p-2 rounded-full text-white'/>
+                            <UserIcon className='w-8 h-8 bg-black/25 p-2 rounded-full text-white' />
                           </Menu.Button>
                         </div>
                         <Transition
@@ -131,7 +137,7 @@ export default function DefaultLayout() {
                 <div className="border-t border-gray-700 pb-3 pt-4">
                   <div className="flex items-center px-5">
                     <div className="flex-shrink-0">
-                    <UserIcon className='w-8 h-8 bg-black/25 p-2 rounded-full text-white'/>
+                      <UserIcon className='w-8 h-8 bg-black/25 p-2 rounded-full text-white' />
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium leading-none text-white">{currentUser.name}</div>
@@ -139,16 +145,16 @@ export default function DefaultLayout() {
                     </div>
                   </div>
                   <div className="mt-3 space-y-1 px-2">
-  
-                      <Disclosure.Button
-                        as="a"
-                        href={"#"}
-                        onClick={ (ev) => logout(ev)}
-                        className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                      >
-                        Sign Out
-                      </Disclosure.Button>
-      
+
+                    <Disclosure.Button
+                      as="a"
+                      href={"#"}
+                      onClick={(ev) => logout(ev)}
+                      className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                    >
+                      Sign Out
+                    </Disclosure.Button>
+
                   </div>
                 </div>
               </Disclosure.Panel>
