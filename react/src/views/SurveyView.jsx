@@ -20,6 +20,8 @@ export default function SurveyView() {
         questions: []
     });
 
+    const [error, setError] = useState('');
+
     const onImageChoose = (ev) => {
 
         const file = ev.target.files[0];
@@ -47,7 +49,7 @@ export default function SurveyView() {
             ...survey
         };
 
-        if(payload.image){
+        if (payload.image) {
             payload.image = payload.image_url;
         }
 
@@ -56,9 +58,14 @@ export default function SurveyView() {
         delete payload.image_url;
 
         axiosClient.post('/survey', payload)
-        .then((res) => {
-            navigate('/surveys');
-        })
+            .then((res) => {
+                navigate('/surveys');
+            })
+            .catch((err) => {
+                if (err && err.response) {
+                    setError(err.response.data.message);
+                }
+            })
     }
 
     return (
@@ -66,6 +73,10 @@ export default function SurveyView() {
             <form action="#" method="post" onSubmit={onSubmit}>
                 <div className="shadow sm-overflow-hidden sm:rounded-md">
                     <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
+                        {error && <div className="bg-red-500 text-white py-3 px-3">
+                            { error }
+                        </div>
+                        }
                         <div>
                             <label className="block text-sm font-medium text-gray-700">
                                 *photo*
