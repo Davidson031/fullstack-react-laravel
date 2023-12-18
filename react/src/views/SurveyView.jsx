@@ -4,6 +4,7 @@ import { LinkIcon, PhotoIcon, TrashIcon } from "@heroicons/react/24/outline";
 import TButton from "../components/core/TButton";
 import axiosClient from "../axios.js";
 import { useNavigate } from "react-router-dom";
+import SurveyQuestions from "../components/SurveyQuestions.jsx";
 
 export default function SurveyView() {
 
@@ -191,6 +192,7 @@ export default function SurveyView() {
                             questions={survey.questions}
                             onQuestionsUpdate={onQuestionsUpdate}
                         /> */}
+                        <SurveyQuestions />
                     </div>
                     <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
                         <TButton>Save</TButton>
