@@ -17,20 +17,28 @@ export default function SurveyView() {
         questions: []
     });
 
-    const onImageChoose = () => {
-        console.log("image chose");
+    const onImageChoose = (ev) => {
+
+        const file = ev.target.files[0];
+
+        const reader = new FileReader();
+
+        reader.onload = () => {
+
+            setSurvey({
+                ...survey,
+                image: file,
+                image_url: reader.result
+            });
+
+            ev.target.value = "";
+        };
+
+        reader.readAsDataURL(file);
     }
 
     const onSubmit = (ev) => {
         ev.preventDefault();
-
-        axiosClient.post('/survey', {
-            title: "Lorem Ipsum",
-            description: "Test",
-            expire_date: "2023-12-31 23:59:59",
-            status: true,
-            questions: []
-        });
     }
 
     return (
