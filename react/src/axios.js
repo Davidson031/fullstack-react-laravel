@@ -10,7 +10,6 @@ const axiosClient = axios.create({
 //----------------------------------------------------------
 //interceptions are checkpoints passed by every api request//
 axiosClient.interceptors.request.use((config) => {
-    const token = '123432432';
     config.headers.Authorization = `Bearer ${localStorage.getItem('TOKEN')}`
     return config;
 });
@@ -18,8 +17,10 @@ axiosClient.interceptors.request.use((config) => {
 axiosClient.interceptors.response.use(response => {
     return response;
 }, error => {
-    if (error.response && error.response.status === 401) {
-        router.navigate("/login");
+    if (error.response && error.response.status === 422) {
+        localStorage.removeItem('TOKEN');
+        window.location.reload();
+        // router.navigate("/login");
         return error;
     }
     throw error;

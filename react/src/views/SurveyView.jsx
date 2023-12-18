@@ -3,8 +3,11 @@ import PageComponent from "../components/PageComponent";
 import { LinkIcon, PhotoIcon, TrashIcon } from "@heroicons/react/24/outline";
 import TButton from "../components/core/TButton";
 import axiosClient from "../axios.js";
+import { useNavigate } from "react-router-dom";
 
 export default function SurveyView() {
+
+    const navigate = useNavigate();
 
     const [survey, setSurvey] = useState({
         title: "",
@@ -24,7 +27,6 @@ export default function SurveyView() {
         const reader = new FileReader();
 
         reader.onload = () => {
-
             setSurvey({
                 ...survey,
                 image: file,
@@ -39,6 +41,24 @@ export default function SurveyView() {
 
     const onSubmit = (ev) => {
         ev.preventDefault();
+
+
+        const payload = {
+            ...survey
+        };
+
+        if(payload.image){
+            payload.image = payload.image_url;
+        }
+
+        payload.expire_date = "2023-12-31 23:59";
+
+        delete payload.image_url;
+
+        axiosClient.post('/survey', payload)
+        .then((res) => {
+            navigate('/surveys');
+        })
     }
 
     return (
