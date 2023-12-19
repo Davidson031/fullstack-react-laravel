@@ -69,6 +69,15 @@ export default function SurveyView() {
             })
     }
 
+
+    function onSurveyUpdate(survey){
+        setSurvey({
+            ...survey
+        })
+    }
+
+
+
     return (
         <PageComponent title='Create new Survey'>
             <form action="#" method="post" onSubmit={onSubmit}>
@@ -185,14 +194,10 @@ export default function SurveyView() {
                                 </p>
                             </div>
                         </div>
-                        {/* <button type="button" onClick={addQuestion}>
-                            Add question
-                        </button> */}
-                        {/* <SurveyQuestions
-                            questions={survey.questions}
-                            onQuestionsUpdate={onQuestionsUpdate}
-                        /> */}
-                        <SurveyQuestions />
+                        <SurveyQuestions 
+                        survey={ survey }
+                        onSurveyUpdate={ onSurveyUpdate }
+                        />
                     </div>
                     <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
                         <TButton>Save</TButton>
