@@ -9,18 +9,21 @@ export default function SurveyQuestions({ survey, onSurveyUpdate }) {
         ...survey
     });
 
-    const addQuestion = () => {
+    const addQuestion = (index) => {
+
+        index = index !== undefined ? index : model.questions.length; 
+
+        model.questions.splice(index, 0, {
+            id: uuidv4(),
+            type: 'text',
+            question: '',
+            description: '',
+            data: {}
+        })
         setModel({
             ...model,
             questions: [
                 ...model.questions,
-                {
-                    id: uuidv4(),
-                    type: 'text',
-                    question: '',
-                    description: '',
-                    data: {}
-                }
             ]
         })
     }
@@ -62,7 +65,7 @@ export default function SurveyQuestions({ survey, onSurveyUpdate }) {
         <>
             <div className="flex justify-between">
                 <h3 className="text-2x1 font-bold">Questions</h3>
-                <button type="button" className="flex items-center text-sm py-1 px-4 rounded-sm text-white bg-gray-600 hover:bg-gray-700" >
+                <button type="button" className="flex items-center text-sm py-1 px-4 rounded-sm text-white bg-gray-600 hover:bg-gray-700" onClick={() => addQuestion()}>
                     <PlusIcon />
                     Add Question
                 </button>
@@ -75,7 +78,7 @@ export default function SurveyQuestions({ survey, onSurveyUpdate }) {
                             index={ind}
                             question={q}
                             questionChange={questionChange}
-                            addQuestion={addQuestion}
+                            addQuestion={() => addQuestion()}
                             deleteQuestion={deleteQuestion}
                         />
                     ))
