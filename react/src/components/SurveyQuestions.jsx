@@ -78,7 +78,7 @@ export default function SurveyQuestions({ survey, onSurveyUpdate }) {
                             index={ind}
                             question={q}
                             questionChange={questionChange}
-                            addQuestion={() => addQuestion()}
+                            addQuestion={addQuestion}
                             deleteQuestion={deleteQuestion}
                         />
                     ))

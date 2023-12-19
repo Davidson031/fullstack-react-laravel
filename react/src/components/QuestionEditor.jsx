@@ -30,7 +30,7 @@ export default function QuestionEditor({ index = 0, question, addQuestion, delet
                 </h4>
 
                 <div className="flex items-center">
-                    <button type="button" onClick={ () => addQuestion(index +1 ) } className="flex items-center text-cs py-1 px-3 mr-2 rounded-sm text-white bg-gray-600 hover:bg-gray-700">
+                    <button type="button" onClick={ () => addQuestion(index + 1 ) } className="flex items-center text-cs py-1 px-3 mr-2 rounded-sm text-white bg-gray-600 hover:bg-gray-700">
                         <PlusIcon className="w-4" />
                         Add
                     </button>
