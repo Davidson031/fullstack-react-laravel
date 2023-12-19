@@ -11,7 +11,7 @@ export default function SurveyQuestions({ survey, onSurveyUpdate }) {
 
     const addQuestion = (index) => {
 
-        index = index !== undefined ? index : model.questions.length; 
+        if(model.questions.length === 5) return;
 
         model.questions.splice(index, 0, {
             id: uuidv4(),
@@ -65,7 +65,7 @@ export default function SurveyQuestions({ survey, onSurveyUpdate }) {
         <>
             <div className="flex justify-between">
                 <h3 className="text-2x1 font-bold">Questions</h3>
-                <button type="button" className="flex items-center text-sm py-1 px-4 rounded-sm text-white bg-gray-600 hover:bg-gray-700" onClick={() => addQuestion()}>
+                <button type="button" className="flex items-center text-sm py-1 px-4 rounded-sm text-white bg-gray-600 hover:bg-gray-700 " onClick={() => addQuestion(model.questions.length)}>
                     <PlusIcon />
                     Add Question
                 </button>
