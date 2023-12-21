@@ -64,4 +64,9 @@ class AuthController extends Controller {
             'sucess' => true
         ]);
     }
+
+    public function me(Request $request)
+    {
+        return $request->user();
+    }
 }
