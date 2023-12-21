@@ -70,13 +70,12 @@ export default function SurveyView() {
     }
 
 
-    function onSurveyUpdate(survey){
+    function onQuestionsUpdate(questions){
         setSurvey({
-            ...survey
+            ...survey,
+            questions
         })
     }
-
-
 
     return (
         <PageComponent title='Create new Survey'>
@@ -195,8 +194,8 @@ export default function SurveyView() {
                             </div>
                         </div>
                         <SurveyQuestions 
-                        survey={ survey }
-                        onSurveyUpdate={ onSurveyUpdate }
+                        questions={ survey.questions }
+                        onQuestionsUpdate={ onQuestionsUpdate }
                         />
                     </div>
                     <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
