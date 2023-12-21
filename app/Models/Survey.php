@@ -20,4 +20,10 @@ class Survey extends Model
     }
 
     protected $fillable = ['title', 'description', 'expire_date', 'user_id', 'image', 'status', 'created_at', 'updated_at'];
+
+
+    public function questions()
+    {
+        return $this->hasMany(SurveyQuestion::class);
+    }
 }
