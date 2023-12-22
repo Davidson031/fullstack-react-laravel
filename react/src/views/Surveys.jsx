@@ -5,32 +5,61 @@ import { useStateContext } from "../contexts/ContextProvider";
 import TButton from "../components/core/TButton";
 import { PlusCircleIcon } from "@heroicons/react/20/solid";
 import axiosClient from "../axios";
+import PaginationLinks from "../components/PaginationLinks";
 
 export default function Surveys() {
 
     const [surveys, setSurveys] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [meta, setMeta] = useState({});
 
     const onDeleteClick = () => {
     }
 
 
     useEffect(() => {
-        axiosClient.get('/survey')
-        .then(( { data }) => {
-            setSurveys(data.data)
-        })
-    },[]);
+        getSurveys();
+    }, []);
+
+
+    const getSurveys = (url) => {
+
+        setLoading(true);
+
+        url = url || '/survey';
+
+        axiosClient.get(url)
+            .then(({ data }) => {
+                setSurveys(data.data);
+                setMeta(data.meta);
+                setLoading(false);
+            })
+    }
+
+    const onPageClick = (link) => {
+        getSurveys(link.url);
+    }
 
 
     return (
         <PageComponent title="Surveys" buttons={(<TButton color="green" to="/surveys/create"> <PlusCircleIcon className="h-6 w-6 mr-2 " /> Create new</TButton>)}>
-            <div>
-                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
-                    {surveys.map((survey) => (
-                        <SurveyListItem survey={survey} key={survey.id} onDeleteClick={onDeleteClick} />
-                    ))}
+
+            {loading &&
+                <div className="text-center font-lg">
+                    Loading...
                 </div>
-            </div>
+            }
+
+            {!loading &&
+                <div>
+                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
+                        {surveys.map((survey) => (
+                            <SurveyListItem survey={survey} key={survey.id} onDeleteClick={onDeleteClick} />
+                        ))}
+                    </div>
+                    <PaginationLinks meta={meta} onPageClick={onPageClick} />
+                </div>
+            }
         </PageComponent>
     );
 }
