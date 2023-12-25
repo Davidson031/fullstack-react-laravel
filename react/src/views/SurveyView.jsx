@@ -5,6 +5,7 @@ import TButton from "../components/core/TButton";
 import axiosClient from "../axios.js";
 import { useNavigate, useParams } from "react-router-dom";
 import SurveyQuestions from "../components/SurveyQuestions.jsx";
+import { useStateContext } from "../contexts/ContextProvider.jsx";
 
 export default function SurveyView() {
 
@@ -26,6 +27,8 @@ export default function SurveyView() {
     const [loading, setLoading] = useState(false);
 
     const [error, setError] = useState('');
+
+    const { showToast } = useStateContext();
 
     const onImageChoose = (ev) => {
 
@@ -72,6 +75,12 @@ export default function SurveyView() {
 
         res.then((res) => {
                 navigate('/surveys');
+                if(id){
+                    showToast("You have succefully updated the survey.")
+                } else {
+                    showToast("You have succefully created a survey.")
+                }
+                
             })
             .catch((err) => {
                 if (err && err.response) {

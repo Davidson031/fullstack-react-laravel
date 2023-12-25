@@ -10,6 +10,7 @@ import router from "../router";
 
 export default function Surveys() {
 
+    const { showToast } = useStateContext();
     const [surveys, setSurveys] = useState([]);
     const [loading, setLoading] = useState(false);
     const [meta, setMeta] = useState({});
@@ -20,6 +21,7 @@ export default function Surveys() {
             axiosClient.delete(`/survey/${id}`)
                 .then(() => {
                     getSurveys();
+                    showToast("You have succefully deleted the survey.")
                 });
 
         }
