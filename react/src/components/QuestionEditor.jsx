@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useStateContext } from "../contexts/ContextProvider";
 import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { v4 as uuidv4 } from "uuid";
+
 
 export default function QuestionEditor({ index = 0, question, addQuestion, deleteQuestion, questionChange }) {
 
@@ -22,6 +24,31 @@ export default function QuestionEditor({ index = 0, question, addQuestion, delet
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
+    function showHaveOptions(type){
+
+        type = type || model.type;
+
+        return ['select', 'radio', 'checkbox'].includes(type);
+    }
+
+    function onTypeChange(ev){
+
+        const newModel = {
+            ...model, 
+            question: ev.target.value
+        };
+
+        if(showHaveOptions(ev.target.value)){
+            newModel.data = {
+                options: [
+                    {uuid: uuid(), text: ''}
+                ]
+            }
+        }
+
+        setModel(newModel);
+    }
+
     return (
         <div>
             <div className="flex justify-between mb-3">
@@ -30,7 +57,7 @@ export default function QuestionEditor({ index = 0, question, addQuestion, delet
                 </h4>
 
                 <div className="flex items-center">
-                    <button type="button" onClick={ () => addQuestion(index + 1 ) } className="flex items-center text-cs py-1 px-3 mr-2 rounded-sm text-white bg-gray-600 hover:bg-gray-700">
+                    <button type="button" onClick={() => addQuestion(index + 1)} className="flex items-center text-cs py-1 px-3 mr-2 rounded-sm text-white bg-gray-600 hover:bg-gray-700">
                         <PlusIcon className="w-4" />
                         Add
                     </button>
@@ -52,7 +79,7 @@ export default function QuestionEditor({ index = 0, question, addQuestion, delet
                         id="question"
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         value={model.question}
-                        onChange={(ev) => setModel({ ...model, question: ev.target.value })}
+                        onChange={ onTypeChange }
                     />
                 </div>
             </div>
@@ -68,7 +95,7 @@ export default function QuestionEditor({ index = 0, question, addQuestion, delet
                     className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
                     {
                         questionTypes.map((type) => (
-                            <option value={type} key={ type }>
+                            <option value={type} key={type}>
                                 {upperCaseFirst(type)}
                             </option>
                         ))
@@ -80,16 +107,30 @@ export default function QuestionEditor({ index = 0, question, addQuestion, delet
                 <label htmlFor="questionDescription" className="block text-sm font-medium text-gray-700">
                     Description
                 </label>
-                <textarea 
-                name="questionDescription" 
-                id="questionDescription" 
-                value={ model.description || ""} 
-                onChange={ (ev) => setModel({ ...model, description: ev.target.value })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                <textarea
+                    name="questionDescription"
+                    id="questionDescription"
+                    value={model.description || ""}
+                    onChange={(ev) => setModel({ ...model, description: ev.target.value })}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 >
                 </textarea>
             </div>
+
+            <div>
+                { showHaveOptions() &&
+                    <div>
+                        <h4 className="text-sm font-semibold mb-1 flex justify-between items-center">
+                            Options
+                            <button type="button" className="flex items-center text-xs py-1 px-2 rounded-sm text-white bg-gray-600 hover:bg-gray-700">
+                                Add
+                            </button>
+                        </h4>
+                    </div>
+                }
+            </div>
+
         </div>
-        
+
     );
 }
