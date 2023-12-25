@@ -62,8 +62,15 @@ export default function SurveyView() {
 
         delete payload.image_url;
 
-        axiosClient.post('/survey', payload)
-            .then((res) => {
+        let res = null;
+
+        if (id) {
+            res = axiosClient.put(`/survey/${id}`, payload);
+        } else {
+            res = axiosClient.post('/survey', payload);
+        }
+
+        res.then((res) => {
                 navigate('/surveys');
             })
             .catch((err) => {
