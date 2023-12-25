@@ -6,6 +6,7 @@ import TButton from "../components/core/TButton";
 import { PlusCircleIcon } from "@heroicons/react/20/solid";
 import axiosClient from "../axios";
 import PaginationLinks from "../components/PaginationLinks";
+import router from "../router";
 
 export default function Surveys() {
 
@@ -13,7 +14,15 @@ export default function Surveys() {
     const [loading, setLoading] = useState(false);
     const [meta, setMeta] = useState({});
 
-    const onDeleteClick = () => {
+    const onDeleteClick = (id) => {
+
+        if (window.confirm('Are you sure you want to delete this survey?')) {
+            axiosClient.delete(`/survey/${id}`)
+                .then(() => {
+                    getSurveys();
+                });
+
+        }
     }
 
 
