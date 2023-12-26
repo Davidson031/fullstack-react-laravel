@@ -6,6 +6,7 @@ import axiosClient from "../axios.js";
 import { useNavigate, useParams } from "react-router-dom";
 import SurveyQuestions from "../components/SurveyQuestions.jsx";
 import { useStateContext } from "../contexts/ContextProvider.jsx";
+import { PlusCircleIcon } from "@heroicons/react/20/solid";
 
 export default function SurveyView() {
 
@@ -74,14 +75,14 @@ export default function SurveyView() {
         }
 
         res.then((res) => {
-                navigate('/surveys');
-                if(id){
-                    showToast("You have succefully updated the survey.")
-                } else {
-                    showToast("You have succefully created a survey.")
-                }
-                
-            })
+            navigate('/surveys');
+            if (id) {
+                showToast("You have succefully updated the survey.")
+            } else {
+                showToast("You have succefully created a survey.")
+            }
+
+        })
             .catch((err) => {
                 if (err && err.response) {
                     setError(err.response.data.message);
@@ -109,8 +110,27 @@ export default function SurveyView() {
         }
     }, [])
 
+    const onDelete = () => {
+
+    }
+
     return (
-        <PageComponent title={!id ? 'Create new Survey' : 'Update Survey'}>
+        <PageComponent title={!id ? 'Create new Survey' : 'Update Survey'} buttons={
+            (
+                <div className="flex gap-2">
+                    <TButton color="green" href={`/survey/public/${survey.slug}`}>
+                        <LinkIcon className="h-4 w-4 mr-2"/>
+                        Public Link
+                    </TButton>
+                    <TButton color="red" onClick={ onDelete }>
+                        <TrashIcon className="h-4 w-4 mr-2 " />
+                        Delete survey
+                    </TButton>
+                </div>
+
+            )
+
+        }>
 
             {
                 loading &&
