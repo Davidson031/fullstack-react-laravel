@@ -57,6 +57,11 @@ export default function QuestionEditor({ index = 0, question, addQuestion, delet
 
         setModel({ ...model})
     }
+
+    function deleteOption(op){
+        model.data.options = model.data.options.filter(option => option.uuid != op.uuid);
+        setModel({ ...model});
+    }
     return (<div>
         <div className="flex justify-between mb-3">
             <h4>
@@ -149,7 +154,7 @@ export default function QuestionEditor({ index = 0, question, addQuestion, delet
                                     <div className="flex items-center mb-1" key={ op.uuid }>
                                         <span className="w-65 text-sm">{ind + 1}.</span>
                                         <input type="text" value={op.text}  onInput={ ev=> {op.text = ev.target.value; setModel({ ...model })} } className="w-full rounded-sm py-1 px-2 text-xs border border-gray-300 focus:border-indigo-500"/>
-                                        <button type="button" className="h-6 w-6 rounded-full flex items-center justify-center border border-transparent transition-colors hover:border-red-100">
+                                        <button type="button" onClick={ ev => deleteOption(op) } className="h-6 w-6 rounded-full flex items-center justify-center border border-transparent transition-colors hover:border-red-100">
                                             <TrashIcon className="w-4 h-4 text-red-500" />
                                         </button>
                                     </div>
