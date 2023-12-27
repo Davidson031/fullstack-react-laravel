@@ -15,8 +15,9 @@ export default function SurveyPublicView() {
 
     const answers = {};
     const { slug } = useParams();
-    const [survey, setSurvey] = useState({ questions: []});
+    const [survey, setSurvey] = useState({ questions: [] });
     const [loading, setLoading] = useState(false);
+    const [surveyFinished, setSurveyFinished] = useState(false);
 
     useEffect(() => {
 
@@ -30,15 +31,20 @@ export default function SurveyPublicView() {
             })
     }, []);
 
-    function answerChanged(question, value){
+    function answerChanged(question, value) {
         answers[question.id] = value;
     }
 
-    function onSubmit(ev){
+    function onSubmit(ev) {
         ev.preventDefault();
 
-        
-    }   
+
+        axiosClient.post(`/survey/${survey.id}/answer`, { answers })
+            .then((response) => {
+                setSurveyFinished(true);
+            });
+
+    }
 
     return (
         <div>
@@ -48,7 +54,7 @@ export default function SurveyPublicView() {
             }
 
             {!loading && (
-                <form onSubmit={ ev => onSubmit(ev)} className="container mx-auto p-4">
+                <form onSubmit={ev => onSubmit(ev)} className="container mx-auto p-4">
                     <div className="grid grid-cols-6">
                         <div className="col-span-5">
                             <h1 className="text-3x1 mb-3">{survey.title}</h1>
@@ -57,17 +63,31 @@ export default function SurveyPublicView() {
                         </div>
                     </div>
 
-                    <div>
-                        {
-                            survey.questions?.map((question, index) => (
-                                <PublicQuestionView key={question.id} question={question} index={index} answerChanged={ val => answerChanged(question, val)}/>
-                            ))
-                        }
-                    </div>
 
-                    <button type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    {surveyFinished && (
+                        <div className="py-8 px-6 bg-emerald-500 text-white w-[600px] mx-auto">
+                            Thank you for participating in the survey.
+                        </div>
+                    )
 
-                    </button>
+                    }
+
+                    {!surveyFinished && (
+                        <>
+                            <div>
+                                {
+                                    survey.questions?.map((question, index) => (
+                                        <PublicQuestionView key={question.id} question={question} index={index} answerChanged={val => answerChanged(question, val)} />
+                                    ))
+                                }
+                            </div>
+
+                            <button type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+
+                            </button>
+                        </>
+                    )}
+
                 </form>
             )}
         </div>
